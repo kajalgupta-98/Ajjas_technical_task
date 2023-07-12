@@ -1,0 +1,45 @@
+.commentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  min-width: 100%;
+  width: 24rem;
+  background-color: purple;
+  box-shadow: 5px 5px 9px 4px black;
+  margin-top: 2rem;
+  border-radius: 10px;
+  min-height: 4rem;
+  height: auto;
+  padding: 0.5rem;
+  /* padding-bottom: 0px; */
+}
+.commentContainer span {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  justify-content: space-around;
+}
+.commentContainer span p {
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.commentContainer span p:hover {
+  color: #ee82ee;
+}
+.replyBtn {
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 2px;
+}
+.replyBtn:hover {
+  background-color: white;
+  color: purple;
+}

@@ -11,6 +11,7 @@ export default function Comment({ comment, index }) {
   const [reply, setReply] = useState("");
   const [comments, setComments] = useRecoilState(commentsAtom);
   const currentComment = comment;
+  const currentCommentText = comment.parentComment;
 
   function handleReply() {
     setShowInputBox(!showInputBox);
@@ -28,8 +29,9 @@ export default function Comment({ comment, index }) {
     ];
     const updated = { ...currentComment, replies: updatedReplies };
     const commentsArray = [...comments];
-    commentsArray.splice(index, 1);
-    setComments([...commentsArray, updated]);
+    commentsArray.splice(index, 1, updated);
+    // commentsArray.splice(index,)
+    setComments([...commentsArray]);
     // console.log(comments);
     setReply("");
     setShowInputBox(false);
@@ -37,7 +39,7 @@ export default function Comment({ comment, index }) {
 
   function handleUpvote(index) {
     const updated = comments.map((item, ind) => {
-      if (ind === index) {
+      if (item.parentComment == currentCommentText && ind === index) {
         return {
           ...item,
           upvotes: item.upvotes + 1
@@ -68,7 +70,7 @@ export default function Comment({ comment, index }) {
       {comment.parentComment}
       <span>
         <p>{score}</p>
-        <p onClick={() => handleUpvote(index)}>
+        <p onClick={() => handleUpvote(currentCommentText, index)}>
           <AiOutlineArrowUp size={25} />
           {comment.upvotes}
         </p>

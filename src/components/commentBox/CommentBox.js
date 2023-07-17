@@ -11,6 +11,7 @@ export default function CommentBox() {
     setComments([
       ...comments,
       {
+        id: Math.random() * 1000,
         parentComment: newComment,
         upvotes: 0,
         downvotes: 0,

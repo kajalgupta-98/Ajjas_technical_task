@@ -3,4 +3,9 @@ const commentsAtom = atom({
   key: "all comments",
   default: []
 });
-export { commentsAtom };
+
+const repliesAtom = atom({
+  key: "replies array",
+  default: []
+});
+export { commentsAtom, repliesAtom };

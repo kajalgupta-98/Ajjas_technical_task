@@ -3,66 +3,92 @@ import style from "./comment.module.css";
 import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
-import { commentsAtom } from "../../Data";
+import { commentsAtom, repliesAtom } from "../../Data";
 
 export default function Comment({ comment, index }) {
   const [showInputBox, setShowInputBox] = useState(false);
   const [score, setScore] = useState(0);
   const [reply, setReply] = useState("");
   const [comments, setComments] = useRecoilState(commentsAtom);
+  const [replies, setReplies] = useRecoilState(repliesAtom);
   const currentComment = comment;
-  const currentCommentText = comment.parentComment;
 
   function handleReply() {
     setShowInputBox(!showInputBox);
   }
+
   function handleSendReply(index) {
     const currentCommentReplies = comments[index].replies || [];
     const updatedReplies = [
       ...currentCommentReplies,
       {
+        id: Math.floor(Math.random() * 4000) + 1000,
         parentComment: reply,
         upvotes: 0,
         downvotes: 0,
         replies: []
       }
     ];
+    setReplies(updatedReplies);
     const updated = { ...currentComment, replies: updatedReplies };
     const commentsArray = [...comments];
     commentsArray.splice(index, 1, updated);
-    // commentsArray.splice(index,)
     setComments([...commentsArray]);
     // console.log(comments);
     setReply("");
     setShowInputBox(false);
   }
 
-  function handleUpvote(index) {
-    const updated = comments.map((item, ind) => {
-      if (item.parentComment == currentCommentText && ind === index) {
-        return {
-          ...item,
-          upvotes: item.upvotes + 1
-        };
-      }
-      return item;
-    });
+  function handleUpvote(currentComment, index) {
+    if (comments[index].id === currentComment.id) {
+      const updated = comments.map((item, ind) => {
+        if (item.id === comment.id) {
+          return {
+            ...item,
+            upvotes: item.upvotes + 1
+          };
+        }
+        return item;
+      });
+
+      setComments(updated);
+    }
+    // else if (replies[index].id === currentComment.id) {
+    //   const updatedReplies = replies.map((item, ind) => {
+    //     if (item.id === comment.id) {
+    //       return {
+    //         ...item,
+    //         upvotes: item.upvotes + 1
+    //       };
+    //     }
+    //     return item;
+    //   });
+
+    //   setReplies(updatedReplies);
+    //   const ind = comments.indexOf(currentComment)
+    //   const updated = { ...currentComment, replies: updatedReplies };
+    //   const commentsArray = [...comments];
+    //   commentsArray.splice(index, 1, updated);
+    //   setComments([...commentsArray]);
+    // }
     setScore(score + 1);
-    setComments(updated);
   }
 
   function handleDownvote(index) {
-    const updated = comments.map((item, ind) => {
-      if (ind === index) {
-        return {
-          ...item,
-          downvotes: item.downvotes + 1
-        };
-      }
-      return item;
-    });
+    if (comments[index].id === currentComment.id) {
+      const updated = comments.map((item, ind) => {
+        if (item.id === comment.id) {
+          return {
+            ...item,
+            downvotes: item.downvotes + 1
+          };
+        }
+        return item;
+      });
+
+      setComments(updated);
+    }
     setScore(score - 1);
-    setComments(updated);
   }
 
   return (
@@ -70,7 +96,7 @@ export default function Comment({ comment, index }) {
       {comment.parentComment}
       <span>
         <p>{score}</p>
-        <p onClick={() => handleUpvote(currentCommentText, index)}>
+        <p onClick={() => handleUpvote(currentComment, index)}>
           <AiOutlineArrowUp size={25} />
           {comment.upvotes}
         </p>
